@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHIFTATY — شيفتاتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04080f;
+  --cyan: #00e5ff;
+  --violet: #7c3aed;
+  --green: #00e676;
+  --orange: #ff6d00;
+  --yellow: #ffd600;
+  --red: #ff1744;
+  --text: #e8f0fe;
+  --muted: #4a5568;
+  --card: rgba(13,21,37,0.8);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ══ NOISE OVERLAY ══ */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ══ GRID BG ══ */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══ GLOW ORBS ══ */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat 8s ease-in-out infinite;
+}
+.orb1 { width:500px;height:500px; background:rgba(124,58,237,0.12); top:-100px; right:-100px; animation-delay:0s; }
+.orb2 { width:400px;height:400px; background:rgba(0,229,255,0.08); bottom:10%; left:-100px; animation-delay:-3s; }
+.orb3 { width:300px;height:300px; background:rgba(0,230,118,0.06); top:50%; left:50%; animation-delay:-6s; }
+
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-20px) scale(1.05); }
+  66% { transform: translate(-20px,30px) scale(0.95); }
+}
+
+/* ══ HERO ══ */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa;
+  font-size: .75rem;
+  font-family: 'Space Mono', monospace;
+  padding: 6px 18px;
+  border-radius: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  animation: fadeDown .8s ease both;
+}
+
+.badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #a78bfa;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+
+.hero-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(3.5rem, 12vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 10px;
+  animation: fadeDown .8s .1s ease both;
+  position: relative;
+}
+
+.hero-logo .s1 { color: var(--cyan); text-shadow: 0 0 60px rgba(0,229,255,0.5), 0 0 120px rgba(0,229,255,0.2); }
+.hero-logo .s2 { color: var(--text); }
+
+.hero-ar {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+  animation: fadeDown .8s .2s ease both;
+  letter-spacing: 4px;
+}
+
+.hero-desc {
+  font-size: clamp(.95rem, 2.5vw, 1.2rem);
+  color: rgba(255,255,255,0.45);
+  max-width: 520px;
+  line-height: 1.9;
+  margin-bottom: 50px;
+  animation: fadeDown .8s .3s ease both;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeDown .8s .4s ease both;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 16px 36px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+  transition: transform .2s, box-shadow .2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(124,58,237,0.5); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 15px 32px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ══ SCROLL INDICATOR ══ */
+.scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeDown 1s .8s ease both;
+}
+.scroll-hint span { font-size: .7rem; color: var(--muted); font-family: 'Space Mono', monospace; letter-spacing: 2px; }
+.scroll-line { width: 1px; height: 50px; background: linear-gradient(180deg, transparent, var(--cyan)); animation: scrollAnim 1.5s ease-in-out infinite; }
+@keyframes scrollAnim { 0%{opacity:0;transform:scaleY(0);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} 100%{opacity:0;transform:scaleY(0);transform-origin:bottom} }
+
+/* ══ STATS BAR ══ */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  background: rgba(0,229,255,0.03);
+  border-top: 1px solid rgba(0,229,255,0.08);
+  border-bottom: 1px solid rgba(0,229,255,0.08);
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 80px);
+  flex-wrap: wrap;
+}
+
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+.stat-label { font-size: .8rem; color: var(--muted); margin-top: 4px; font-weight: 700; }
+
+/* ══ SECTIONS ══ */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.section-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: .68rem;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before { content:''; flex:1; max-width:40px; height:1px; background:var(--cyan); }
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.4);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 50px;
+}
+
+/* ══ FEATURES GRID ══ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.feat-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .3s, border-color .3s;
+  backdrop-filter: blur(10px);
+}
+.feat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-color, var(--cyan)), transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.feat-card:hover { transform: translateY(-5px); border-color: var(--accent-color, rgba(0,229,255,0.3)); }
+.feat-card:hover::before { opacity: 0.04; }
+
+.feat-card.cyan  { --accent-color: var(--cyan); }
+.feat-card.violet { --accent-color: var(--violet); }
+.feat-card.green { --accent-color: var(--green); }
+.feat-card.orange { --accent-color: var(--orange); }
+.feat-card.yellow { --accent-color: var(--yellow); }
+.feat-card.red { --accent-color: var(--red); }
+
+.feat-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+}
+.feat-card.cyan .feat-icon    { background: rgba(0,229,255,0.12); }
+.feat-card.violet .feat-icon  { background: rgba(124,58,237,0.15); }
+.feat-card.green .feat-icon   { background: rgba(0,230,118,0.12); }
+.feat-card.orange .feat-icon  { background: rgba(255,109,0,0.12); }
+.feat-card.yellow .feat-icon  { background: rgba(255,214,0,0.12); }
+.feat-card.red .feat-icon     { background: rgba(255,23,68,0.12); }
+
+.feat-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.feat-card.cyan .feat-title    { color: var(--cyan); }
+.feat-card.violet .feat-title  { color: #a78bfa; }
+.feat-card.green .feat-title   { color: var(--green); }
+.feat-card.orange .feat-title  { color: var(--orange); }
+.feat-card.yellow .feat-title  { color: var(--yellow); }
+.feat-card.red .feat-title     { color: #ff5252; }
+
+.feat-desc {
+  font-size: .88rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.8;
+}
+
+.feat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+.feat-tag {
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+}
+.feat-card.cyan .feat-tag    { background:rgba(0,229,255,0.1); color:var(--cyan); border:1px solid rgba(0,229,255,0.2); }
+.feat-card.violet .feat-tag  { background:rgba(124,58,237,0.1); color:#a78bfa; border:1px solid rgba(124,58,237,0.2); }
+.feat-card.green .feat-tag   { background:rgba(0,230,118,0.1); color:var(--green); border:1px solid rgba(0,230,118,0.2); }
+.feat-card.orange .feat-tag  { background:rgba(255,109,0,0.1); color:var(--orange); border:1px solid rgba(255,109,0,0.2); }
+.feat-card.yellow .feat-tag  { background:rgba(255,214,0,0.1); color:var(--yellow); border:1px solid rgba(255,214,0,0.2); }
+.feat-card.red .feat-tag     { background:rgba(255,23,68,0.1); color:#ff5252; border:1px solid rgba(255,23,68,0.2); }
+
+/* ══ BIG FEATURE SHOWCASE ══ */
+.showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+.showcase.flip { direction: ltr; }
+.showcase.flip .showcase-text { direction: rtl; }
+.showcase.flip .showcase-visual { direction: rtl; }
+
+@media(max-width:700px){ .showcase { grid-template-columns:1fr; } .showcase.flip { direction: rtl; } }
+
+.showcase-text {}
+.showcase-text .section-tag { margin-bottom: 10px; }
+
+.showcase-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.showcase-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .92rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+}
+.showcase-list li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex-shrink: 0;
+  margin-top: 9px;
+}
+
+/* ══ MOCK PHONE UI ══ */
+.phone-wrap {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.phone {
+  width: 260px;
+  background: #0d1525;
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 28px;
+  padding: 20px 16px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+  position: relative;
+  overflow: hidden;
+}
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+}
+
+.phone-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.phone-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 20px rgba(0,229,255,0.4);
+}
+.phone-sub { font-size: .62rem; color: var(--muted); margin-top: 2px; }
+
+.phone-stat {
+  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,229,255,0.07));
+  border: 1px solid rgba(0,229,255,0.12);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.phone-stat-label { font-size: .6rem; color: var(--muted); margin-bottom: 4px; font-weight: 700; }
+.phone-stat-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.phone-mini {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.phone-mini-val { font-size: .85rem; font-weight: 800; }
+.phone-mini-val.c { color: var(--cyan); }
+.phone-mini-val.v { color: #a78bfa; }
+.phone-mini-val.g { color: var(--green); }
+.phone-mini-lbl { font-size: .55rem; color: var(--muted); margin-top: 2px; }
+
+.phone-shift {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.phone-shift::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--cyan), var(--violet));
+}
+.phone-shift-name { font-size: .72rem; font-weight: 800; }
+.phone-shift-date { font-size: .58rem; color: var(--muted); }
+.phone-shift-amt { font-size: .78rem; font-weight: 800; color: var(--green); }
+
+/* mini bar chart */
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 50px;
+  margin-top: 10px;
+  padding: 0 4px;
+}
+.mini-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+  transition: height .5s ease;
+}
+
+/* ══ PRICING ══ */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+@media(max-width:600px){ .pricing-grid { grid-template-columns:1fr; } }
+
+.price-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: transform .3s;
+}
+.price-card:hover { transform: translateY(-5px); }
+.price-card.featured {
+  border-color: rgba(0,229,255,0.3);
+  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(0,229,255,0.07));
+}
+.price-card.featured::before {
+  content: '⭐ الأكثر قيمة';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 800;
+  padding: 4px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: 'Tajawal', sans-serif;
+}
+.price-card.featured { padding-top: 50px; }
+
+.price-tier { font-size: .75rem; color: var(--muted); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-family: 'Space Mono', monospace; }
+.price-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.price-card:not(.featured) .price-val { color: rgba(255,255,255,0.5); }
+.price-card.featured .price-val { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.price-currency { font-size: .8rem; color: var(--muted); margin-bottom: 24px; }
+.price-currency strong { color: var(--text); font-weight: 700; }
+
+.price-features {
+  list-style: none;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.price-features li {
+  font-size: .88rem;
+  color: rgba(255,255,255,0.55);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price-features li .chk { font-size: .9rem; }
+
+/* ══ TECH STRIP ══ */
+.tech-strip {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 24px 20px;
+  overflow: hidden;
+}
+.tech-track {
+  display: flex;
+  gap: 40px;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+.tech-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-family: 'Space Mono', monospace;
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.tech-item span { color: var(--cyan); font-size: .9rem; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ══ CTA FINAL ══ */
+.cta-final {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 100px 20px;
+  overflow: hidden;
+}
+.cta-final::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.cta-title .hl {
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cta-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+.wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 18px 42px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 10px 40px rgba(37,211,102,0.35);
+  transition: transform .2s, box-shadow .2s;
+}
+.wa-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 50px rgba(37,211,102,0.45); }
+
+/* ══ FOOTER ══ */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-size: .78rem;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ══ DIVIDER ══ */
+.divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.15), transparent);
+  margin: 0 40px;
+}
+
+/* TICKER */
+.ticker-wrap {
+  position: relative;
+  z-index: 1;
+  background: rgba(0,229,255,0.04);
+  border-top: 1px solid rgba(0,229,255,0.08);
+  border-bottom: 1px solid rgba(0,229,255,0.08);
+  padding: 12px 0;
+  overflow: hidden;
+}
+.ticker-content {
+  display: flex;
+  gap: 60px;
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+.ticker-item {
+  font-family: 'Space Mono', monospace;
+  font-size: .72rem;
+  color: var(--cyan);
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+.ticker-sep { color: var(--violet); opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="badge">⚡ الإصدار الجديد — 2026</div>
+
+  <div class="hero-logo">
+    <span class="s1">SHIFT</span><span class="s2">ATY</span>
+  </div>
+  <div class="hero-ar">شيفتاتي</div>
+
+  <p class="hero-desc">
+    تطبيقك الشخصي لتتبع شيفتاتك وحساب مرتبك بدقة في ثوانٍ<br>
+    مخصص للأطباء وكل من يعمل في أكثر من مكان
+  </p>
+
+  <div class="hero-cta">
+    <a href="https://wa.me/201030391975" class="btn-primary">💬 تواصل الآن</a>
+    <span class="btn-secondary">اكتشف المميزات</span>
+  </div>
+
+  <div onclick="window.scrollBy({top: window.innerHeight, behavior:'smooth'})" style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;animation:bounceArrow 1.8s ease-in-out infinite;">
+    <span style="font-size:.65rem;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:2px;">SCROLL</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  </div>
+
+  <style>
+    @keyframes bounceArrow {
+      0%,100% { transform: translateX(-50%) translateY(0); opacity:.6; }
+      50% { transform: translateX(-50%) translateY(8px); opacity:1; }
+    }
+  </style>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker-wrap">
+  <div class="ticker-content">
+    <span class="ticker-item">⚡ حساب تلقائي للمرتب</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">☁️ حفظ على السحابة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">📊 إحصائيات متقدمة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🌍 13 عملة عالمية</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🌐 عربي وإنجليزي</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">📱 يُثبَّت كتطبيق</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🔐 بياناتك آمنة ومشفّرة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🖨️ طباعة تقارير احترافية</span>
+    <span class="ticker-sep">◆</span>
+    <!-- repeat -->
+    <span class="ticker-item">⚡ حساب تلقائي للمرتب</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">☁️ حفظ على السحابة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">📊 إحصائيات متقدمة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🌍 13 عملة عالمية</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🌐 عربي وإنجليزي</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">📱 يُثبَّت كتطبيق</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🔐 بياناتك آمنة ومشفّرة</span>
+    <span class="ticker-sep">◆</span>
+    <span class="ticker-item">🖨️ طباعة تقارير احترافية</span>
+  </div>
+</div>
+
+<!-- ══ STATS BAR ══ -->
+<div class="stats-bar reveal">
+  <div class="stat-item">
+    <div class="stat-icon">🌍</div>
+    <span class="stat-num" data-target="13">0</span>
+    <div class="stat-unit">عملة</div>
+    <div class="stat-label">مدعومة</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-icon">⚡</div>
+    <span class="stat-num" data-target="4">0</span>
+    <div class="stat-unit">أنواع</div>
+    <div class="stat-label">الأجر المدعومة</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item stat-highlight">
+    <div class="stat-icon">💰</div>
+    <span class="stat-num" data-target="100">0</span>
+    <div class="stat-unit">جنيه فقط</div>
+    <div class="stat-label">مرة واحدة للأبد</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-icon">📋</div>
+    <span class="stat-num stat-inf">∞</span>
+    <div class="stat-unit">شيفت</div>
+    <div class="stat-label">غير محدودة</div>
+  </div>
+</div>
+
+<style>
+.stats-bar {
+  padding: 50px 40px !important;
+  gap: 0 !important;
+  justify-content: center !important;
+  background: rgba(0,0,0,0.3) !important;
+  border-top: 1px solid rgba(0,229,255,0.1) !important;
+  border-bottom: 1px solid rgba(0,229,255,0.1) !important;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 clamp(20px, 4vw, 60px);
+  position: relative;
+}
+.stat-highlight .stat-num {
+  background: linear-gradient(135deg, var(--green), var(--yellow)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 20px rgba(0,230,118,0.4));
+}
+.stat-icon {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 10px rgba(0,229,255,0.3));
+}
+.stat-num {
+  font-family: 'Space Mono', monospace !important;
+  font-size: clamp(2.8rem, 6vw, 4.5rem) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  background: linear-gradient(135deg, var(--cyan), var(--violet)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 20px rgba(0,229,255,0.3));
+  display: block !important;
+  margin-bottom: 6px;
+}
+.stat-inf {
+  font-size: clamp(3rem, 7vw, 5rem) !important;
+}
+.stat-unit {
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.stat-label {
+  font-size: .75rem !important;
+  color: var(--muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: .5px;
+}
+.stat-divider {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(180deg, transparent, rgba(0,229,255,0.2), transparent);
+  align-self: center;
+  flex-shrink: 0;
+}
+@media(max-width:600px){
+  .stat-divider { display: none; }
+  .stats-bar { flex-wrap: wrap; gap: 30px !important; padding: 40px 20px !important; }
+  .stat-item { width: 45%; }
+}
+</style>
+
+<!-- ══ FEATURES ══ -->
+<section class="section" id="features">
+  <div class="reveal">
+    <div class="section-tag">المميزات</div>
+    <h2 class="section-title">كل حاجة محتاجها<br><span style="color:var(--cyan)">في مكان واحد</span></h2>
+    <p class="section-sub">مصمم للمحترفين اللي بيشتغلوا في أكثر من مكان ومحتاجين يعرفوا بالظبط كسبوا قد إيه</p>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feat-card cyan reveal">
+      <div class="feat-icon">🏥</div>
+      <div class="feat-title">إدارة أماكن العمل</div>
+      <p class="feat-desc">سجّل كل مكان بتشتغل فيه بأسمه وسعره الخاص. تعديل وحذف في أي وقت.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">بالساعة</span>
+        <span class="feat-tag">بالشيفت</span>
+        <span class="feat-tag">بالحالة</span>
+        <span class="feat-tag">مخصص</span>
+      </div>
+    </div>
+
+    <div class="feat-card violet reveal">
+      <div class="feat-icon">📝</div>
+      <div class="feat-title">تسجيل الشيفتات</div>
+      <p class="feat-desc">اختار المكان والتاريخ والعدد — التطبيق يحسب الإجمالي فوراً. أضف بونص وحالات إضافية لكل شيفت.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">حساب فوري</span>
+        <span class="feat-tag">عناصر إضافية</span>
+      </div>
+    </div>
+
+    <div class="feat-card green reveal">
+      <div class="feat-icon">💰</div>
+      <div class="feat-title">ملخص المرتب</div>
+      <p class="feat-desc">شوف أجرك الأساسي + الإضافي + الضريبة + الخصومات = الصافي. بعرض كلي أو لكل مكان على حده.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">ضريبة مخصصة</span>
+        <span class="feat-tag">خصومات</span>
+        <span class="feat-tag">فلتر بالتاريخ</span>
+      </div>
+    </div>
+
+    <div class="feat-card orange reveal">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">إحصائيات متقدمة</div>
+      <p class="feat-desc">إجمالي الدخل — متوسط شهري — أعلى شهر — أكثر مكان دخلاً — رسم بياني للدخل الشهري.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">رسم بياني</span>
+        <span class="feat-tag">ترتيب الأماكن</span>
+        <span class="feat-tag">أعلى شهر</span>
+      </div>
+    </div>
+
+    <div class="feat-card cyan reveal">
+      <div class="feat-icon">☁️</div>
+      <div class="feat-title">حفظ تلقائي على السحابة</div>
+      <p class="feat-desc">بياناتك محفوظة على Firebase. لو اتمسح المتصفح — ادخل بإيميلك وهترجعلك كل حاجة تلقائياً.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">Firebase</span>
+        <span class="feat-tag">تشفير</span>
+        <span class="feat-tag">مزامنة تلقائية</span>
+      </div>
+    </div>
+
+    <div class="feat-card yellow reveal">
+      <div class="feat-icon">🖨️</div>
+      <div class="feat-title">تقارير وتصدير</div>
+      <p class="feat-desc">اطبع تقرير احترافي أو صدّره وشاركه على واتساب أو إيميل بضغطة واحدة.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">طباعة</span>
+        <span class="feat-tag">مشاركة</span>
+        <span class="feat-tag">تصدير JSON</span>
+      </div>
+    </div>
+
+    <div class="feat-card violet reveal">
+      <div class="feat-icon">🌍</div>
+      <div class="feat-title">متعدد العملات واللغات</div>
+      <p class="feat-desc">13 عملة عربية وعالمية. دعم كامل للعربية والإنجليزية مع تبديل فوري.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">🇪🇬 جنيه</span>
+        <span class="feat-tag">🇸🇦 ريال</span>
+        <span class="feat-tag">🇺🇸 دولار</span>
+        <span class="feat-tag">+10 عملات</span>
+      </div>
+    </div>
+
+    <div class="feat-card green reveal">
+      <div class="feat-icon">📱</div>
+      <div class="feat-title">تطبيق كامل PWA</div>
+      <p class="feat-desc">ثبّته على موبايلك كتطبيق أصلي بدون App Store. شغّال على iOS وAndroid وDesktop.</p>
+      <div class="feat-tags">
+        <span class="feat-tag">iOS</span>
+        <span class="feat-tag">Android</span>
+        <span class="feat-tag">Desktop</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ SHOWCASE: MOCK PHONE ══ -->
+<section class="section">
+  <div class="showcase reveal">
+    <div class="showcase-text">
+      <div class="section-tag">واجهة المستخدم</div>
+      <h2 class="section-title">تصميم داكن<br><span style="color:var(--violet)">أنيق ومريح</span></h2>
+      <p class="section-sub">واجهة سايبر-فيوتشر مصممة خصيصاً للاستخدام المريح في أي وقت من اليوم</p>
+      <ul class="showcase-list">
+        <li>5 تابات رئيسية — أماكن / تسجيل / السجل / الملخص / الإحصائيات</li>
+        <li>تقويم مخصص لاختيار التواريخ بدقة</li>
+        <li>فلترة الشيفتات حسب المكان أو الشهر</li>
+        <li>شاشات تعريفية تفاعلية لأول مستخدم</li>
+        <li>رسوم متحركة سلسة وتجربة استخدام احترافية</li>
+      </ul>
+    </div>
+    <div class="showcase-visual">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-header">
+            <div class="phone-logo">⚡ SHIFTATY</div>
+            <div class="phone-sub">تتبع ساعات عملك وأرباحك</div>
+          </div>
+          <div class="phone-stat">
+            <div class="phone-stat-label">💰 صافي المرتب — مارس 2026</div>
+            <div class="phone-stat-val">8,450</div>
+            <div style="font-size:.6rem;color:var(--muted);margin-top:2px;">جنيه مصري</div>
+          </div>
+          <div class="phone-row">
+            <div class="phone-mini"><div class="phone-mini-val c">18</div><div class="phone-mini-lbl">شيفت</div></div>
+            <div class="phone-mini"><div class="phone-mini-val v">144</div><div class="phone-mini-lbl">ساعة</div></div>
+            <div class="phone-mini"><div class="phone-mini-val g">32</div><div class="phone-mini-lbl">حالة</div></div>
+          </div>
+          <div class="phone-shift">
+            <div><div class="phone-shift-name">مستشفى النور</div><div class="phone-shift-date">2026-03-07</div></div>
+            <div class="phone-shift-amt">+600 ج</div>
+          </div>
+          <div class="phone-shift">
+            <div><div class="phone-shift-name">عيادة الأمل</div><div class="phone-shift-date">2026-03-06</div></div>
+            <div class="phone-shift-amt">+320 ج</div>
+          </div>
+          <div class="phone-shift">
+            <div><div class="phone-shift-name">مستشفى السلام</div><div class="phone-shift-date">2026-03-05</div></div>
+            <div class="phone-shift-amt">+500 ج</div>
+          </div>
+          <div class="mini-chart">
+            <div class="mini-bar" style="height:40%;background:rgba(0,229,255,0.4)"></div>
+            <div class="mini-bar" style="height:65%;background:rgba(124,58,237,0.5)"></div>
+            <div class="mini-bar" style="height:55%;background:rgba(0,230,118,0.4)"></div>
+            <div class="mini-bar" style="height:80%;background:rgba(255,109,0,0.5)"></div>
+            <div class="mini-bar" style="height:70%;background:rgba(0,229,255,0.4)"></div>
+            <div class="mini-bar" style="height:100%;background:linear-gradient(180deg,var(--cyan),var(--violet))"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ TECH STRIP ══ -->
+<div class="tech-strip">
+  <div class="tech-track">
+    <div class="tech-item"><span>⚡</span> Firebase Firestore</div>
+    <div class="tech-item"><span>🔐</span> Encrypted Storage</div>
+    <div class="tech-item"><span>📱</span> PWA / Service Worker</div>
+    <div class="tech-item"><span>☁️</span> Auto Cloud Sync</div>
+    <div class="tech-item"><span>🌐</span> Arabic + English</div>
+    <div class="tech-item"><span>🔒</span> Firebase Auth</div>
+    <div class="tech-item"><span>📊</span> Real-time Stats</div>
+    <div class="tech-item"><span>🖨️</span> Print Reports</div>
+    <!-- repeat -->
+    <div class="tech-item"><span>⚡</span> Firebase Firestore</div>
+    <div class="tech-item"><span>🔐</span> Encrypted Storage</div>
+    <div class="tech-item"><span>📱</span> PWA / Service Worker</div>
+    <div class="tech-item"><span>☁️</span> Auto Cloud Sync</div>
+    <div class="tech-item"><span>🌐</span> Arabic + English</div>
+    <div class="tech-item"><span>🔒</span> Firebase Auth</div>
+    <div class="tech-item"><span>📊</span> Real-time Stats</div>
+    <div class="tech-item"><span>🖨️</span> Print Reports</div>
+  </div>
+</div>
+
+<!-- ══ PRICING ══ -->
+<section class="section">
+  <div class="reveal" style="text-align:center;margin-bottom:50px;">
+    <div class="section-tag" style="justify-content:center;">الأسعار</div>
+    <h2 class="section-title">بسيط وواضح</h2>
+    <p class="section-sub" style="margin:0 auto;">بدون اشتراكات شهرية — ادفع مرة واحدة واستخدم للأبد</p>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="price-tier">مجاني</div>
+      <div class="price-val">0</div>
+      <div class="price-currency"><strong>جنيه</strong> — للأبد</div>
+      <ul class="price-features">
+        <li><span class="chk">✅</span> مكان عمل واحد</li>
+        <li><span class="chk">✅</span> شيفتات غير محدودة</li>
+        <li><span class="chk">✅</span> ملخص كامل</li>
+        <li><span class="chk">✅</span> حفظ على السحابة</li>
+        <li><span class="chk">✅</span> كل اللغات والعملات</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">كامل</div>
+      <div class="price-val">100</div>
+      <div class="price-currency"><strong>جنيه فقط</strong> — مرة واحدة</div>
+      <ul class="price-features">
+        <li><span class="chk">✅</span> كل مميزات المجاني</li>
+        <li><span class="chk" style="color:var(--cyan)">⭐</span> أماكن عمل غير محدودة</li>
+        <li><span class="chk" style="color:var(--cyan)">⭐</span> إحصائيات متقدمة كاملة</li>
+        <li><span class="chk" style="color:var(--cyan)">⭐</span> تقارير واحترافية</li>
+        <li><span class="chk" style="color:var(--cyan)">⭐</span> دعم مباشر على واتساب</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="reveal" style="text-align:center;margin-top:36px;">
+    <div style="font-size:.7rem;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:2px;margin-bottom:16px;text-transform:uppercase;">متاح الدفع عبر</div>
+    <div style="display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.15);border-radius:12px;padding:12px 22px;">
+        <span style="font-size:1.3rem;">📱</span>
+        <span style="font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;color:var(--text);">InstaPay</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.15);border-radius:12px;padding:12px 22px;">
+        <span style="font-size:1.3rem;">📲</span>
+        <span style="font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;color:var(--text);">Vodafone Cash</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:12px 22px;">
+        <span style="font-size:1.3rem;">💳</span>
+        <span style="font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;color:var(--text);">Paymob</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ══ -->
+<section class="cta-final reveal">
+  <h2 class="cta-title">جاهز تبدأ<br><span class="hl">تتبع شيفتاتك؟</span></h2>
+  <p class="cta-sub">تواصل معنا الآن على واتساب وهتاخد كود التفعيل فور الدفع</p>
+  <a href="https://wa.me/201030391975?text=عايز أشترك في تطبيق SHIFTATY" class="wa-btn" target="_blank">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    تواصل على واتساب
+  </a>
+</section>
+
+<footer>
+  ⚡ SHIFTATY © 2026 — جميع الحقوق محفوظة &nbsp;|&nbsp; 01030391975
+</footer>
+
+<script>
+// ══ REVEAL ON SCROLL ══
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ══ COUNT UP ANIMATION ══
+function countUp(el, target, duration = 1500) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target; clearInterval(timer); return; }
+    el.textContent = Math.floor(start);
+  }, 16);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-target]').forEach(el => {
+        countUp(el, parseInt(el.dataset.target));
+      });
+      statsObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stats-bar').forEach(el => statsObserver.observe(el));
+</script>
+</body>
+</html>
